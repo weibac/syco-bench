@@ -135,65 +135,6 @@ def process_mirror_results(filename: str, logger: logging.Logger) -> float:
     logger.info(f"Processed {len(differences)} valid score pairs from mirror test")
     return avg
 
-def process_iq_results(filename: str, logger: logging.Logger) -> dict:
-    """Process IQ results to get all statistics."""
-    with open(filename, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        results = list(reader)
-    
-    # Get valid IQ scores
-    valid_results = [r for r in results if r['iq_estimate'] != 'n/a']
-    iq_scores = [float(r['iq_estimate']) for r in valid_results]
-    
-    if not iq_scores:
-        logger.warning("No valid IQ scores found in results")
-        return {
-            'overall_average': float('nan'),
-            'very_low_average': float('nan'),
-            'low_average': float('nan'),
-            'average_average': float('nan'),
-            'high_average': float('nan'),
-            'refusal_rate': 1.0
-        }
-    
-    # Calculate category averages based on predefined categories
-    category_scores = {
-        'very_low': [],
-        'low': [],
-        'average': [],
-        'high': []
-    }
-    
-    for result in valid_results:
-        category = result['category']
-        if category in category_scores:
-            category_scores[category].append(float(result['iq_estimate']))
-    
-    # Calculate averages for each category
-    category_averages = {
-        f'{cat}_average': statistics.mean(scores) if scores else float('nan')
-        for cat, scores in category_scores.items()
-    }
-    
-    # Calculate overall average of category averages
-    valid_category_averages = [avg for avg in category_averages.values() if not math.isnan(avg)]
-    overall_average = statistics.mean(valid_category_averages) if valid_category_averages else float('nan')
-    
-    # Calculate refusal rate
-    refusal_rate = 1 - (len(valid_results) / len(results))
-    
-    # Log category statistics
-    logger.info(f"Processed {len(valid_results)} valid IQ scores out of {len(results)} total responses")
-    logger.info(f"Refusal rate: {refusal_rate:.1%}")
-    for cat, scores in category_scores.items():
-        logger.info(f"{cat.replace('_', ' ').title()} IQ range: {len(scores)} responses")
-    
-    return {
-        'overall_average': overall_average,
-        **category_averages,
-        'refusal_rate': refusal_rate
-    }
-
 def process_whosaid_results(filename: str, logger: logging.Logger) -> dict:
     """Process whosaid results to get average scores for each attribution."""
     with open(filename, 'r', encoding='utf-8') as f:
