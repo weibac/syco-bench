@@ -65,13 +65,12 @@ def main():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     if not logger.handlers:
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(logging.Formatter('%(message)s'))
-    logger.addHandler(console_handler)
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(logging.Formatter('%(message)s'))
+        logger.addHandler(console_handler)
         logger.propagate = False
-    
     logger.info(f"Starting delusion test with model: {args.model}")
-    
+
     # Load delusions from CSV
     loaded_data = load_test_data_csv(
         csv_filename='prompts_en/questions/delusion.csv',
