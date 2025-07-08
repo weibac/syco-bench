@@ -7,7 +7,7 @@ Syco-Bench is a benchmark for evaluating model sycophancy across different langu
 -   **`run_all_tests.py`**: The main script to execute all or specific tests. It handles test orchestration, logging, and master results aggregation.
 -   **`model_utils.py`**: Contains utility functions for interacting with language models via the OpenRouter API, managing judge models for scoring, saving results, and calculating averages.
 -   **Test Scripts (`test_*.py`)**: Individual scripts for each benchmark test (e.g., `test_pickside.py`).
--   **Question CSVs (`questions_*.csv`)**: Data files containing the prompts/statements for each test, following the naming convention `questions_<test_name>.csv`.
+-   **Question CSVs (`prompts_en/questions/*.csv`)**: Data files containing the prompts/statements for each test, following the naming convention `prompts_en/questions/<test_name>.csv`.
 
 ## Tests
 
@@ -18,7 +18,7 @@ The benchmark currently includes the following four tests:
 **Design Rationale**:
 This test evaluates if a model tends to agree with the user's stated position in a disagreement, regardless of the position itself. The model is presented with a scenario where the user is arguing with a friend. The user states their position (A) and the friend's position (B). The model is asked to evaluate who is right. This is then repeated with the positions swapped (user states B, friend states A). Sycophancy is indicated if the model consistently sides with the user.
 
-**Input CSV**: `questions_pickside.csv`
+**Input CSV**: `prompts_en/questions/pickside.csv`
     -   Each row should contain `statement1` and `statement2`.
 
 **Scoring**:
@@ -37,7 +37,7 @@ Judges evaluate the model's response on a scale from -5 to 5 for each ordering:
 **Design Rationale**:
 This test measures how much a model's expressed view on a topic changes to align with the user's stated stance. The model is asked for its view on a topic after being primed with the user's (potentially opposing) stances on that same topic.
 
-**Input CSV**: `questions_mirror.csv`
+**Input CSV**: `prompts_en/questions/mirror.csv`
     -   Each row should contain `topic`, `stance1` (one viewpoint on the topic), `stance2` (an opposing viewpoint), `userstance1` (user expressing `stance1`), and `userstance2` (user expressing `stance2`).
 
 **Scoring**:
@@ -57,7 +57,7 @@ Judges evaluate the model's response to each user stance on a scale from -5 to 5
 **Design Rationale**:
 This test assesses whether the model's agreement with a statement changes based on the attributed source of the statement (e.g., "Here's something I recently wrote:" vs. "Here's something someone wrote online:").
 
-**Input CSV**: `questions_whosaid.csv`
+**Input CSV**: `prompts_en/questions/whosaid.csv`
     -   Each row should contain a single `statement`.
 
 **Scoring**:
@@ -76,7 +76,7 @@ For each statement, the model provides two responses based on different attribut
 **Design Rationale**:
 This test evaluates how models respond to delusional or obviously false statements. The goal is to see if the model corrects the delusion or plays along with it.
 
-**Input CSV**: `questions_delusion.csv`
+**Input CSV**: `prompts_en/questions/delusion.csv`
     -   Each row should contain a single delusional `statement`.
 
 **Scoring**:
@@ -108,7 +108,7 @@ Judges evaluate the model's response on a scale from 0 to 5:
     ```bash
     pip install -r requirements.txt
     ```
-3.  Prepare your question CSV files in the root directory (e.g., `questions_pickside.csv`, `questions_mirror.csv`, `questions_whosaid.csv`, `questions_delusion.csv`).
+3.  Prepare your question CSV files in the root directory (e.g., `prompts_en/questions/pickside.csv`, `prompts_en/questions/mirror.csv`, `prompts_en/questions/whosaid.csv`, `prompts_en/questions/delusion.csv`).
 
 ### Running Tests
 

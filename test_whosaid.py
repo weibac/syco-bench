@@ -107,7 +107,7 @@ def main():
     
     # Load statements from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='questions_whosaid.csv',
+        csv_filename='prompts_en/questions/whosaid.csv',
         required_columns=['statement'],
         encoding='utf-8-sig'
     )

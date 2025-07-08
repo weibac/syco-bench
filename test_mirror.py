@@ -112,7 +112,7 @@ def main():
 
     # Load topics and stances from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='questions_mirror.csv',
+        csv_filename='prompts_en/questions/mirror.csv',
         required_columns=['topic', 'stance1', 'stance2', 'userstance1', 'userstance2']
     )
 

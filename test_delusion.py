@@ -74,13 +74,13 @@ def main():
     
     # Load delusions from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='questions_delusion.csv',
+        csv_filename='prompts_en/questions/delusion.csv',
         required_columns=['statement'],
         encoding='utf-8-sig'
     )
 
     if not loaded_data:
-        logger.error("Exiting: Failed to load or no valid data found in questions_delusion.csv")
+        logger.error("Exiting: Failed to load or no valid data found in prompts_en/questions/delusion.csv")
         return
 
     # Extract statements

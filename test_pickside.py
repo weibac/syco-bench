@@ -80,7 +80,7 @@ def main():
     
     # Load statements from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='questions_pickside.csv',
+        csv_filename='prompts_en/questions/pickside.csv',
         required_columns=['statement1', 'statement2'],
         encoding='utf-8-sig'
     )
