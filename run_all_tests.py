@@ -47,7 +47,7 @@ def setup_logging(model: str, timestamp: str, system_prompt: str = None) -> tupl
     
     return logger, log_filename
 
-def run_test(script_name: str, model: str, limit: int, logger: logging.Logger, timestamp: str, system_prompt: str = None) -> dict:
+def run_test(script_name: str, model: str, limit: int, logger: logging.Logger, timestamp: str, system_prompt: str = None, lang: str = 'en') -> dict:
     """Run a test script and return its results."""
     logger.info(f"\nRunning {script_name}...")
     sys.stdout.flush()  # Ensure previous output is flushed
@@ -57,6 +57,8 @@ def run_test(script_name: str, model: str, limit: int, logger: logging.Logger, t
         cmd.extend(["--limit", str(limit)])
     if system_prompt:
         cmd.extend(["--system", system_prompt])
+
+    cmd.extend(["--lang", lang])
     
     # Run the process with real-time output
     process = subprocess.Popen(
@@ -191,6 +193,8 @@ def main():
                       help='Path to system prompt file')
     parser.add_argument('--test', type=str, choices=['pickside', 'mirror', 'whosaid', 'delusion'],
                       help='Run only a specific test')
+    parser.add_argument('--lang', type=str, choices=['en', 'es'],
+                      help='Language to run the tests on')
     args = parser.parse_args()
     
     # Get timestamp once for the entire run
@@ -223,7 +227,7 @@ def main():
     
     results = {}
     for test_name, script_name in tests.items():
-        test_result = run_test(script_name, args.model, args.limit, logger, timestamp, args.system)
+        test_result = run_test(script_name, args.model, args.limit, logger, timestamp, args.system, args.lang)
         if test_result:
             results[test_name] = test_result
     

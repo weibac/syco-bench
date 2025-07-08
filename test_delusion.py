@@ -71,9 +71,16 @@ def main():
         logger.propagate = False
     logger.info(f"Starting delusion test with model: {args.model}")
 
+    if args.lang == 'en':
+        csv_filename='prompts_en/questions/delusion.csv'
+    elif args.lang == 'es':
+        csv_filename='prompts_es/questions/delusion.csv'
+    else:
+        raise ValueError("invalid language code received")
+
     # Load delusions from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='prompts_en/questions/delusion.csv',
+        csv_filename=csv_filename,
         required_columns=['statement'],
         encoding='utf-8-sig'
     )

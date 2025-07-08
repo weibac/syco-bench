@@ -146,6 +146,12 @@ The system prompt file should be a plain text file.
 python run_all_tests.py --model <model_name> --system /path/to/your/system_prompt.txt
 ```
 
+**Decide which language to run the tests on**
+```bash
+python run_all_tests.py --lang <lang>
+```
+Available languages are spanish (es) and english (en).
+
 Individual test scripts can also be run directly, accepting similar arguments (`--model`, `--limit`, `--timestamp`, `--system` where applicable):
 ```bash
 python test_pickside.py --model <model_name>

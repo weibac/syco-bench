@@ -12,11 +12,12 @@ from model_utils import (
     load_test_data_csv
 )
 from prompts_en.frame_templates import PROMPT_TEMPLATE_EN_PICKSIDE
+from prompts_es.frame_templates import PROMPT_TEMPLATE_ES_PICKSIDE
 import argparse
 import sys
 
 
-def process_statements(statement_pairs: List[Dict[str, str]], model: str, system_prompt: str = None) -> List[dict]:
+def process_statements(statement_pairs: List[Dict[str, str]], model: str, prompt_template, system_prompt: str = None) -> List[dict]:
     """Process all statement pairs and return results."""
     results = []
     
@@ -27,7 +28,7 @@ def process_statements(statement_pairs: List[Dict[str, str]], model: str, system
         sys.stdout.flush()
         
         # Test first ordering
-        prompt1 = PROMPT_TEMPLATE_EN_PICKSIDE.format(statement1=statement1, statement2=statement2)
+        prompt1 = prompt_template.format(statement1=statement1, statement2=statement2)
         response1 = get_model_response(prompt1, model, system_prompt=system_prompt)
         try:
             print(f"Response 1: {response1}", flush=True)
@@ -42,7 +43,7 @@ def process_statements(statement_pairs: List[Dict[str, str]], model: str, system
         sys.stdout.flush()
         
         # Test second ordering
-        prompt2 = PROMPT_TEMPLATE_EN_PICKSIDE.format(statement1=statement2, statement2=statement1)
+        prompt2 = prompt_template.format(statement1=statement2, statement2=statement1)
         response2 = get_model_response(prompt2, model, system_prompt=system_prompt)
         try:
             print(f"Response 2: {response2}", flush=True)
@@ -75,10 +76,19 @@ def main():
     if not os.getenv("OPENROUTER_API_KEY"):
         print("Error: OPENROUTER_API_KEY environment variable not set")
         return
-    
+
+    if args.lang == 'en':
+        csv_filename='prompts_en/questions/pickside.csv'
+        prompt_template = PROMPT_TEMPLATE_EN_PICKSIDE
+    elif args.lang == 'es':
+        csv_filename='prompts_es/questions/pickside.csv'
+        prompt_template = PROMPT_TEMPLATE_ES_PICKSIDE
+    else:
+        raise ValueError("invalid language code received")
+
     # Load statements from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='prompts_en/questions/pickside.csv',
+        csv_filename=csv_filename,
         required_columns=['statement1', 'statement2'],
         encoding='utf-8-sig'
     )
@@ -101,7 +111,7 @@ def main():
 
     try:
         # Process all statements
-        results = process_statements(statement_items, args.model, system_prompt_content)
+        results = process_statements(statement_items, args.model, prompt_template, system_prompt_content)
         
         # Save all results at once
         filename = save_results(results, "pickside", args.model, args.timestamp, args.system)

@@ -12,12 +12,13 @@ from model_utils import (
     load_test_data_csv
 )
 from prompts_en.frame_templates import PROMPT_TEMPLATE_EN_MIRROR
+from prompts_es.frame_templates import PROMPT_TEMPLATE_ES_MIRROR
 import statistics
 import argparse
 import sys
 
 
-def process_topics(topic_data_list: List[Dict[str, str]], model: str, system_prompt: str = None) -> List[dict]:
+def process_topics(topic_data_list: List[Dict[str, str]], model: str, prompt_template: str, system_prompt: str = None) -> List[dict]:
     """Process all topic-stance pairs and return results."""
     results = []
     
@@ -30,7 +31,7 @@ def process_topics(topic_data_list: List[Dict[str, str]], model: str, system_pro
         print(f"Processing topic {i+1}/{len(topic_data_list)}: {topic[:50]}...", flush=True)
         
         # Test with first user stance
-        prompt1 = PROMPT_TEMPLATE_EN_MIRROR.format(
+        prompt1 = prompt_template.format(
             topic=topic,
             userstance=userstance1,
             stance1=stance1,
@@ -53,7 +54,7 @@ def process_topics(topic_data_list: List[Dict[str, str]], model: str, system_pro
         print(f"Median score 1: {median_score1}")
         
         # Test with second user stance
-        prompt2 = PROMPT_TEMPLATE_EN_MIRROR.format(
+        prompt2 = prompt_template.format(
             topic=topic,
             userstance=userstance2,
             stance1=stance1,
@@ -106,9 +107,18 @@ def main():
         print("Error: OPENROUTER_API_KEY environment variable not set")
         return
 
+    if args.lang == 'en':
+        csv_filename='prompts_en/questions/mirror.csv'
+        prompt_template = PROMPT_TEMPLATE_EN_MIRROR
+    elif args.lang == 'es':
+        csv_filename='prompts_es/questions/mirror.csv'
+        prompt_template = PROMPT_TEMPLATE_ES_MIRROR
+    else:
+        raise ValueError("invalid language code received")
+
     # Load topics and stances from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='prompts_en/questions/mirror.csv',
+        csv_filename=csv_filename,
         required_columns=['topic', 'stance1', 'stance2', 'userstance1', 'userstance2']
     )
 
@@ -130,7 +140,7 @@ def main():
 
     try:
         # Process all topics
-        results = process_topics(topic_items, args.model, system_prompt_content)
+        results = process_topics(topic_items, args.model, prompt_template, system_prompt_content)
         
         # Save all results at once
         filename = save_results(results, "mirror", args.model, args.timestamp, args.system)

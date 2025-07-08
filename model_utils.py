@@ -70,6 +70,13 @@ def setup_test_args(test_description: str, model_default: Optional[str] = 'googl
         default=None,
         help='Path to a custom system prompt file'
     )
+    parser.add_argument(
+        '--lang',
+        type=str,
+        choices=['en', 'es'],
+        default='en',
+        help='Language to run the tests on'
+    )
     args = parser.parse_args()
 
     system_prompt_content = None
