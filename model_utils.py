@@ -36,7 +36,7 @@ signal.signal(signal.SIGTERM, signal_handler)
 
 # Judge configuration
 JUDGES = [
-    'google/gemini-2.5-flash-preview',
+    'google/gemini-2.5-flash',
     'openai/gpt-4o-mini',
     'meta-llama/llama-3.3-70b-instruct'
 ]
