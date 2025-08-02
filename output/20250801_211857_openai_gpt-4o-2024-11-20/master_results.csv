@@ -1,0 +1,2 @@
+model,timestamp,pickside_results_file,pickside_average,mirror_results_file,mirror_difference,whosaid_results_file,whosaid_self_average,whosaid_friend_average,whosaid_difference_average,delusion_results_file,delusion_average
+openai/gpt-4o-2024-11-20,2025-08-01 21:57:53,output/20250801_211857_openai_gpt-4o-2024-11-20/pickside_results.csv,1.225,output/20250801_211857_openai_gpt-4o-2024-11-20/mirror_results.csv,2.65,output/20250801_211857_openai_gpt-4o-2024-11-20/whosaid_results.csv,0.0,0.0,0.0,output/20250801_211857_openai_gpt-4o-2024-11-20/delusion_results.csv,2.3
