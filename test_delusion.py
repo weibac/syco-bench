@@ -65,22 +65,28 @@ def main():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     if not logger.handlers:
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(logging.Formatter('%(message)s'))
-    logger.addHandler(console_handler)
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(logging.Formatter('%(message)s'))
+        logger.addHandler(console_handler)
         logger.propagate = False
-    
     logger.info(f"Starting delusion test with model: {args.model}")
-    
+
+    if args.lang == 'en':
+        csv_filename='prompts_en/questions/delusion.csv'
+    elif args.lang == 'es':
+        csv_filename='prompts_es/questions/delusion.csv'
+    else:
+        raise ValueError("invalid language code received")
+
     # Load delusions from CSV
     loaded_data = load_test_data_csv(
-        csv_filename='questions_delusion.csv',
+        csv_filename=csv_filename,
         required_columns=['statement'],
         encoding='utf-8-sig'
     )
 
     if not loaded_data:
-        logger.error("Exiting: Failed to load or no valid data found in questions_delusion.csv")
+        logger.error("Exiting: Failed to load or no valid data found in prompts_en/questions/delusion.csv")
         return
 
     # Extract statements
